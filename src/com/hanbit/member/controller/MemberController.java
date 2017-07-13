@@ -47,7 +47,6 @@ public class MemberController {
 	            break flag;
 			case FIND_ID:
 				//service.findById(JOptionPane.showInputDialog("조회할 아이디 입력"));
-				
 				// JOptionPane.showMessageDialog 안에는 toString() 이 생략이 가능하다(자주 쓰다보니 자동추가됨)
 				JOptionPane.showMessageDialog(null, service.findById(JOptionPane.showInputDialog("조회할 아이디 입력")));
 				break flag;
@@ -66,11 +65,11 @@ public class MemberController {
 				break flag;
 			case UPDATE:
 				member = new MemberBean();
-				JOptionPane.showInputDialog("아이디");
+				member.setUserId(JOptionPane.showInputDialog("아이디"));
 				member.setUserPw(JOptionPane.showInputDialog("변경할 비밀번호"));
 				member.setName(JOptionPane.showInputDialog("변경할 이름"));
 				member.setSSN(JOptionPane.showInputDialog("변경할 주민번호"));
-				service.updatePass(member);
+				service.modify(member);
 				JOptionPane.showMessageDialog(null, "수정완료");
 				
 				/*	MemberBean memberList = new MemberBean();
@@ -79,8 +78,7 @@ public class MemberController {
 				JOptionPane.showMessageDialog(null, "수정완료");
 */				break flag;
 			case DEL:
-				String deleteId = JOptionPane.showInputDialog("삭제할 아이디");
-				service.delete(deleteId);
+				service.remove(JOptionPane.showInputDialog("삭제할 아이디"));
 				JOptionPane.showMessageDialog(null, "삭제완료");
 				break flag;
 			}

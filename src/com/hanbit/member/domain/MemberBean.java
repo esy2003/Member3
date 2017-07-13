@@ -1,8 +1,14 @@
 package com.hanbit.member.domain;
 
 public class MemberBean {
-	private String userId, userPw, name, ssn;
+	private String userId, userPw, name, ssn, regdate;
 
+	public String getRegdate() {
+		return regdate;
+	}
+	public void setRegdate(String regdate) {
+		this.regdate = regdate;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}

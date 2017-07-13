@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hanbit.member.dao.MemberDAO;
+import com.hanbit.member.daoImpl.MemberDAOImpl;
 import com.hanbit.member.domain.MemberBean;
 import com.hanbit.member.service.MemberService;
 
@@ -35,6 +37,7 @@ public class MemberServiceImpl implements MemberService {
 	public int countMembers() {
 		return map.size();
 	}
+	
 	@Override
 	public List<MemberBean> findByName(String name) {
 		List<MemberBean> temp = new ArrayList<>();
@@ -49,11 +52,14 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberBean findById(String id) {
-		return map.get(id);
+		MemberBean member = new MemberBean();
+		MemberDAO dao = new MemberDAOImpl();
+		member=dao.selectById(id);
+		return member;
 	}
 	
 	@Override
-	public void updatePass(MemberBean bean) {
+	public void modify(MemberBean bean) {
 		if (!bean.getName().equals("")) {
 			map.get(bean.getUserId()).setName(bean.getName());
 		}
@@ -65,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
 		}		
 	}
 	@Override
-	public void delete(String id) {
+	public void remove(String id) {
 		map.remove(id);
 	}
 }
