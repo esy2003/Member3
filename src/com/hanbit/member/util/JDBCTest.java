@@ -6,15 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.hanbit.member.constants.Database;
+import com.hanbit.member.constants.DB;
 
 public class JDBCTest {
 	public static void main(String[] args) {
 		String findName = "";
 		Connection conn = null;
 		try {
-			Class.forName(Database.DRIVER);
-			conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
+			Class.forName(DB.DRIVER);
+			conn = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD);
 			Statement stmt = conn.createStatement();
 			String sql = "SELECT * FROM Member WHERE userId='cho'";
 			ResultSet rs = stmt.executeQuery(sql);

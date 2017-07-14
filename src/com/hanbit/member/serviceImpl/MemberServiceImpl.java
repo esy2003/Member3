@@ -20,34 +20,23 @@ public class MemberServiceImpl implements MemberService {
 		member = new MemberBean();
 	}
 	@Override
-	public void addMember(MemberBean bean) {
-		map.put(bean.getUserId(),bean);
+	public String addMember(MemberBean bean) {
+		MemberDAO dao = new MemberDAOImpl();
+		return (dao.insert(bean)==1)?"ok":"no";
 	}
 	@Override
 	public List<MemberBean> getMembers() {
-		List<MemberBean> list = new ArrayList<>();
-		Set<String> keys = map.keySet();
-		for (String s:keys) {
-			list.add(map.get(s));
-		}
-		return list;
+		return new MemberDAOImpl().selectAll();
 	}
 
 	@Override
 	public int countMembers() {
-		return map.size();
+		return new MemberDAOImpl().count();
 	}
 	
 	@Override
 	public List<MemberBean> findByName(String name) {
-		List<MemberBean> temp = new ArrayList<>();
-		Set<String> keys = map.keySet();
-			for (String s:keys) {
-				if (name.equals(map.get(s).getName())) {
-					temp.add(map.get(s));
-				}
-			}
-		return temp;
+		return new MemberDAOImpl().selectByName(name);
 	}
 
 	@Override
@@ -59,19 +48,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public void modify(MemberBean bean) {
-		if (!bean.getName().equals("")) {
-			map.get(bean.getUserId()).setName(bean.getName());
-		}
-		if (!bean.getUserPw().equals("")) {
-			map.get(bean.getUserPw()).setUserPw(bean.getUserPw());
-		}
-		if (!bean.getSSN().equals("")) {
-			map.get(bean.getSSN()).setSSN(bean.getSSN());
-		}		
+	public String modify(MemberBean bean) {
+		MemberDAO dao=new MemberDAOImpl();
+		return (dao.insert(bean)==1)?"ok":"no";
 	}
 	@Override
-	public void remove(String id) {
-		map.remove(id);
+	public String remove(String id) {
+		MemberDAO dao = new MemberDAOImpl();
+		return (dao.insert(member)==1)?"ok":"no";
 	}
 }

@@ -30,14 +30,13 @@ public class MemberController {
 					)) {
 			case EXIT: return;
 			case ADD:
-			String[] arr = JOptionPane.showInputDialog("name/id/pw/ssn").split("/");
+			String[] arr = JOptionPane.showInputDialog("id/pw/name/ssn").split("/");
 				member = new MemberBean();
-				member.setName(arr[0]);
-				member.setUserId(arr[1]);
-				member.setUserPw(arr[2]);
+				member.setUserId(arr[0]);
+				member.setUserPw(arr[1]);
+				member.setName(arr[2]);
 				member.setSSN(arr[3]);
-				service.addMember(member);
-				JOptionPane.showMessageDialog(null, "회원가입성공");
+				JOptionPane.showMessageDialog(null, service.addMember(member));
 				break flag;
 			case COUNT:
 				JOptionPane.showMessageDialog(null, service.countMembers() + " 명");	

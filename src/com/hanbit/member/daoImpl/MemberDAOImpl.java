@@ -1,134 +1,147 @@
 package com.hanbit.member.daoImpl;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.hanbit.member.constants.Database;
+import com.hanbit.member.constants.DB;
 import com.hanbit.member.dao.MemberDAO;
 import com.hanbit.member.domain.MemberBean;
 
 
 public class MemberDAOImpl implements MemberDAO {
-
-	@Override
-	public void insert(MemberBean member) {
+	public MemberDAOImpl() {
 		try {
-			Class.forName(Database.DRIVER);
-			Connection conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql = "";
-			stmt.executeQuery(sql);
+			Class.forName(DB.DRIVER);
+		} catch (ClassNotFoundException e) {
+			System.out.println("DRIVER LOAD FAIL");
+			e.printStackTrace();
+		}		
+	}
+	@Override
+	public int insert(MemberBean member) {
+		int rs=0;
+		try {
+			rs = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeUpdate(
+					String.format("INSERT INTO %s(%s, %s, %s, %s, %s) VALUES('%S', '%S', '%S', '%S', SYSDATE)"
+							, DB.TABLE_MEMBER, 
+							DB.MEM_ID, DB.MEM_PW, DB.MEM_NAME, DB.MEM_SSN, DB.MEM_REGDATE, 
+							member.getUserId(), member.getUserPw(), member.getName(), member.getSSN()));
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return rs;
 	}
 
 	@Override
 	public List<MemberBean> selectAll() {
+		List<MemberBean> list = new ArrayList<>();
 		try {
-			Class.forName(Database.DRIVER);
-			Connection conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql = "";
-			stmt.executeQuery(sql);
+			ResultSet rs = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeQuery(
+			String.format("SELECT * FROM %s", DB.TABLE_MEMBER));
+			MemberBean member = null;
+			while(rs.next()) {
+				member = new MemberBean();
+				member.setUserId(rs.getString(DB.MEM_ID));
+                member.setUserPw(rs.getString(DB.MEM_PW));
+                member.setName(rs.getString(DB.MEM_NAME));
+                member.setSSN(rs.getString(DB.MEM_SSN));
+                member.setRegdate(rs.getString(DB.MEM_REGDATE));
+                list.add(member);
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return list;
 	}
 
 	@Override
 	public int count() {
+		int count = 0;
 		try {
-			Class.forName(Database.DRIVER);
-			Connection conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql = "";
-			stmt.executeQuery(sql);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
-	}
-
-	@Override
-	public MemberBean selectById(String id) {
-		Connection conn=null;
-		MemberBean member = new MemberBean();
-		try {
-			Class.forName(Database.DRIVER);
-			conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql="SELECT * FROM Member WHERE userId = '"+id+"'";
-			ResultSet rs = stmt.executeQuery(sql);
+			ResultSet rs = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeQuery(
+					String.format("SELECT COUNT(*) AS %s FROM %s", "count", DB.TABLE_MEMBER));
 			if (rs.next()) {
-				member.setName(rs.getString("name"));
-				member.setUserId(rs.getString("userId"));
-				member.setUserPw(rs.getString("userPw"));
-				member.setSSN(rs.getString("ssn"));
+				count = Integer.parseInt(rs.getString("count"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return member;
+		return count;
 	}
 
+	   @Override
+	   public MemberBean selectById(String id) {
+	      MemberBean member = new MemberBean();
+	         try {
+	            ResultSet rs=DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeQuery(
+	                  String.format("SELECT * FROM Member WHERE userId='%s'", id));
+	            if(rs.next()){
+	               member.setUserId(rs.getString(DB.MEM_ID));
+	               member.setUserPw(rs.getString(DB.MEM_PW));
+	               member.setName(rs.getString(DB.MEM_NAME));
+	               member.setSSN(rs.getString(DB.MEM_SSN));
+	               member.setRegdate(rs.getString(DB.MEM_REGDATE));
+	            }
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }                  
+	      return member;
+	   }
 	@Override
 	public List<MemberBean> selectByName(String name) {
+		List<MemberBean> list = new ArrayList<>();
 		try {
-			Class.forName(Database.DRIVER);
-			Connection conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql = "";
-			stmt.executeQuery(sql);
+			MemberBean member = null;
+			ResultSet rs = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeQuery(
+					String.format("SELECT * FROM %s WHERE name='%s'", DB.TABLE_MEMBER, name));
+			while (rs.next()) {
+					member = new MemberBean();
+	                member.setUserId(rs.getString(DB.MEM_ID));
+	                member.setUserPw(rs.getString(DB.MEM_PW));
+	                member.setName(rs.getString(DB.MEM_NAME));
+	                member.setSSN(rs.getString(DB.MEM_SSN));
+	                member.setRegdate(rs.getString(DB.MEM_REGDATE));
+	                list.add(member);
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return list;
 	}
 
 	@Override
-	public void update(MemberBean member) {
+	public int update(MemberBean member) {
+		int rs=0;
 		try {
-			Class.forName(Database.DRIVER);
-			Connection conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql = "";
-			stmt.executeQuery(sql);
+			rs = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeUpdate(
+					String.format("UPDATE Member SET name='%s' WHERE userId='%s'", ""));
+			
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return rs;
+	
 	}
 
 	@Override
-	public void delete(String id) {
+	public int delete(String id) {
+		int rs=0;
 		try {
-			Class.forName(Database.DRIVER);
-			Connection conn = DriverManager.getConnection(Database.URL, Database.USERID, Database.PASSWORD);
-			Statement stmt = conn.createStatement();
-			String sql = "";
-			stmt.executeQuery(sql);
+			rs = DriverManager.getConnection(DB.URL, DB.USERID, DB.PASSWORD).createStatement().executeUpdate(
+					String.format("%s", ""));
+			
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return rs;
 	}
 
 }

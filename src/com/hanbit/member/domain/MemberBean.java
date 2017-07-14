@@ -38,7 +38,7 @@ public class MemberBean {
 	}
 
 	public String toString() {
-		return "welcome " + name + "( 유저Id : " + userId + ", 유저Pw : "+userPw+ "주민번호 : " + ssn + ")";
+		return "welcome " + name + "( 유저Id : " + userId + ", 유저Pw : "+userPw+ "주민번호 : " + ssn + ")\n";
 	}
 
 }

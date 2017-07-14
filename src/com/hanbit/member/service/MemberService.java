@@ -5,11 +5,11 @@ import java.util.List;
 import com.hanbit.member.domain.MemberBean;
 
 public interface MemberService {
-	public void addMember(MemberBean member);
+	public String addMember(MemberBean member);
 	public List<MemberBean> getMembers();
 	public int countMembers();
 	public MemberBean findById(String id);
 	public List<MemberBean> findByName(String name);
-	public void modify(MemberBean member);
-	public void remove(String id);
+	public String modify(MemberBean member);
+	public String remove(String id);
 }
